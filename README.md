@@ -1,5 +1,5 @@
 # SDM_PPGE_PPGBio
- Curso de pós em Modelagem de Distribuição de Espécies
+ Disciplina de pós-graduação em Modelagem de Distribuição de Espécies
  
  ## Conteúdo prático:
 
