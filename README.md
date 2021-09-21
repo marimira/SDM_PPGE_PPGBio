@@ -5,14 +5,14 @@
 
 ### Script 1: Introdução ao R
 
-### Script 2: Obtendo dados de ocorrência e preditores ambientais
+### Script 2: Preditores ambientais
 
-### Script 3: 
+### Script 3: Registros de ocorrência, pseudo-ausência e background
 
-### Script 4:
+### Script 4: Algoritmos de envelopes climáticos e regressão
 
-### Script 5:
+### Script 5: Algoritmos de classificação e aprendizado de máquina
 
-### Script 6:
+### Script 6: Projeção, transferabilidade e incerteza
 
-### Script 7:
+### Script 7: Avaliação e incerteza dos modelos
