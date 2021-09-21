@@ -3,16 +3,16 @@
  
  ## Conteúdo prático:
 
-### Script 1: Introdução ao R
+### script 1: Introdução ao R
 
-### Script 2: Preditores ambientais
+### script 2: Preditores ambientais
 
-### Script 3: Registros de ocorrência, pseudo-ausência e background
+### script 3: Registros de ocorrência, pseudo-ausência e background
 
-### Script 4: Algoritmos de envelopes climáticos e regressão
+### script 4: Algoritmos de envelopes climáticos e regressão
 
-### Script 5: Algoritmos de classificação e aprendizado de máquina
+### script 5: Algoritmos de classificação e aprendizado de máquina
 
-### Script 6: Projeção, transferabilidade e incerteza
+### script 6: Projeção, transferabilidade e incerteza
 
-### Script 7: Avaliação e incerteza dos modelos
+### script 7: Avaliação e incerteza dos modelos
