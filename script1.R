@@ -8,7 +8,7 @@
 2+2
 2 + 2
 2 * 3
-4 / 2
+4 / 2 # comentário qualquer
 10 - 5
 4 ^ 2
 X <- 2  #Objeto X é igual a 2 (<- é o mesmo que =)
