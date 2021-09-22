@@ -5,6 +5,10 @@
 
 ##Inicio do script
 
+#### Definindo área de trabalho ####
+setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereço da pasta da disciplina no seu computador
+getwd()
+
 #### Carregando pacotes ####
 library(biomod2)
 library(raster)
@@ -21,67 +25,74 @@ library(dplyr)
 library(dismo)
 library(gridExtra)
 
-#### Listando e carregando os datasets pree-existentes ####
+#### Listando e carregando os datasets pre-existentes ####
 
 list_datasets()
 
 #Listando as camadas do WorldClim
-list_layers("Freshwater")
+list_layers("WorldClim")
 
-#Obtendo camadas do Worldclim a partir da pasta da disciplina
+#Obtendo camadas do Worldclim a partir da pasta da disciplina (se vc fez o download completo da pasta do GoogleDrive o caminho abaixo deve funcionar)
 #Camadas topográficas
-alt=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Presente/WC_alt_lonlat.tif")
+alt=raster("./Camadas/Presente/WC_alt_lonlat.tif")
 #Altitude
 
 #Camadas climáticas
-bio1=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Presente/WC_bio1_lonlat.tif")
+bio1=raster("./Camadas/Presente/WC_bio1_lonlat.tif")
 #Temperatura Anual Média
 
-bio3=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Presente/WC_bio3_lonlat.tif")
+bio3=raster("./Camadas/Presente/WC_bio3_lonlat.tif")
 #Isotermalidade
 
-bio4=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Presente/WC_bio4_lonlat.tif")
+bio4=raster("./Camadas/Presente/WC_bio4_lonlat.tif")
 #Sazonalidade da temperatura
 
-bio7=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/WC_bio7_lonlat.tif")
+bio7=raster("./Camadas/Presente/WC_bio7_lonlat.tif")
 #Variação Anual da Temperatura
 
-bio12=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Presente/WC_bio12_lonlat.tif")
+bio12=raster("./Camadas/Presente/WC_bio12_lonlat.tif")
 #Precipitação Anual
 
-bio15=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Presente/WC_bio15_lonlat.tif")
+bio15=raster("./Camadas/Presente/WC_bio15_lonlat.tif")
 #Sazonalidade da precipitação
 
 #### OPCIONAL ####
 #Obtendo camadas do WorldClim online em caso de não possuir/querer baixar
 
-#alt=load_layers("WC_alt", datadir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+#alt=load_layers("WC_alt", datadir = "./Camadas")
 #Altitude
 
-#bio1=load_layers("WC_bio1", datadir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+#bio1=load_layers("WC_bio1", datadir = "./Camadas")
 #Temperatura Média Anual
 
-#bio3=load_layers("WC_bio3", datadir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+#bio3=load_layers("WC_bio3", datadir = "./Camadas")
 #Isotermalidade
 
-#bio4=load_layers("WC_bio4", datadir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+#bio4=load_layers("WC_bio4", datadir = "./Camadas")
 #Sazonalidade da temperatura (SD x)
 
-#bio7=load_layers("WC_bio7", datadir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+#bio7=load_layers("WC_bio7", datadir = "./Camadas")
 #Variação Anual de Temperatura 
 
-#bio12=load_layers("WC_bio12", datadir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+#bio12=load_layers("WC_bio12", datadir = "./Camadas")
 #Precipitação Anual
 
-#bio15=load_layers("WC_bio15", datadir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+#bio15=load_layers("WC_bio15", datadir = "./Camadas")
 #Sazonalidade da precipitação (CV)
 
 #### Visualizando as camadas climáticas ####
-#Código Mari
+plot(alt, xlim=c(-85,-30),ylim=c(-55,12))
+par(mfrow=c(2,3),mar=c(3,3,1,0))
+plot(bio1, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
+plot(bio3, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
+plot(bio4, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
+plot(bio7, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
+plot(bio12, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
+plot(bio15, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
+dev.off()
 ###
 
 #### Explorando os detalhes das camadas climáticas ####
-
 
 #Obtendo os limites e detalhes das camadas
 bbox(alt); ncol(alt); nrow(alt) ; res(alt)
@@ -91,12 +102,13 @@ bbox(bio4); ncol(bio4); nrow(bio4) ; res(bio4)
 bbox(bio7); ncol(bio7); nrow(bio7) ; res(bio7)
 bbox(bio12); ncol(bio12); nrow(bio12) ; res(bio12)
 bbox(bio15); ncol(bio15); nrow(bio15) ; res(bio15)
+compareRaster(alt, bio1, bio3, bio4, bio7, bio12, bio15)
 
 #### Processando as camadas climáticas ####
 
 #Cortando as camadas para o Brasil
 #Carregando o mapa do Brasil
-Brasil=getData('GADM', country= 'Brazil', level=1, path = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas")
+Brasil=getData('GADM', country= 'Brazil', level=1, path = "./Camadas")
 
 #Cortando cada camada de uma vez para o Brasil e 'perfumando' minimamente os mapas
 
@@ -130,6 +142,7 @@ bbox(bio4Brasil); ncol(bio4Brasil); nrow(bio4Brasil) ; res(bio4Brasil)
 bbox(bio7Brasil); ncol(bio7Brasil); nrow(bio7Brasil) ; res(bio7Brasil)
 bbox(bio12Brasil); ncol(bio12Brasil); nrow(bio12Brasil) ; res(bio12Brasil)
 bbox(bio15Brasil); ncol(bio15Brasil); nrow(bio15Brasil) ; res(bio15Brasil)
+compareRaster(altBrasil, bio1Brasil, bio3Brasil, bio4Brasil, bio7Brasil, bio12Brasil, bio15Brasil)
 
 #### Comparando as dimensões das camadas Brasil e Mundo
 bbox(bio1); ncol(bio1); nrow(bio1) ; res(bio1)
@@ -140,12 +153,11 @@ bbox(bio1Brasil); ncol(bio1Brasil); nrow(bio1Brasil) ; res(bio1Brasil)
 biostack=stack(altBrasil,bio1Brasil,bio3Brasil,bio4Brasil,bio7Brasil,bio12Brasil,bio15Brasil)
 plot(biostack)
 
-
 #### Cortando as variáveis para o polígono da Araponga ####
 
-procniaspolygon=readOGR("C:/Users/rhtar/OneDrive/R/ENM_PPGE/procnias_polygon.shp")
+procniaspolygon=readOGR("./Procnias/procnias_polygon.shp")
 
-#Plotando o poligono da distribuição da Araponga no mapa do Brasil
+#Plotando o polígono da distribuição da Araponga no mapa do Brasil
 plot(procniaspolygon)  
 #refinar com os codigos da Mari
 
@@ -172,7 +184,7 @@ plot(bio12procnias, main = "bio12 Procnias",xlab = "Longitude", ylab = "Latitude
 bio15procnias=mask(crop(bio15,procniaspolygon),procniaspolygon)
 plot(bio15procnias, main = "bio15 Procnias",xlab = "Longitude", ylab = "Latitude")
 
-#Cortando o 'stack' com as variaveis para o poligono da Araponga
+#Cortando o 'stack' com as variáveis para o polígono da Araponga
 biostack1=mask(crop(biostack,procniaspolygon),procniaspolygon)
 biostack1
 summary(biostack1)
@@ -184,7 +196,14 @@ plot(biostack1)
 
 #Correlação entre as camadas usando a função 'pairs'
 pairs(biostack1)
-
+library(dismo)
+set.seed(1963)
+backgr <- randomPoints(biostack1, 10000)
+absclim <- data.frame(extract(biostack1, backgr))
+absclim.std <- data.frame(scale(absclim)) # Scale variables
+library(corrplot)
+M <- cor(absclim.std)
+corrplot.mixed(M, upper = "ellipse", lower = "number",number.cex = 0.8,tl.cex = 0.8)
 
 # Checagem de multicolinearidade entre as camadas - remoção stepwise com threshold = 0.7
 
