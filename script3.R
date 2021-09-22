@@ -4,6 +4,15 @@
 # Script 3 - Registros de ocorrência, pseudo-ausências e background.
 
 
+#### Definindo área de trabalho ####
+setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereço da pasta da disciplina no seu computador
+getwd()
+
+#### Carregando pacotes ####
+library(tidyr)
+library(maptools)
+library(spThin)
+
 #### Carregando os registros de ocorrência ####
 
 #### Obtendo os registros do diretório ####
