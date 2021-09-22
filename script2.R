@@ -81,15 +81,15 @@ bio15=raster("./Camadas/Presente/WC_bio15_lonlat.tif")
 #Sazonalidade da precipitação (CV)
 
 #### Visualizando as camadas climáticas ####
-plot(alt, xlim=c(-85,-30),ylim=c(-55,12))
-par(mfrow=c(2,3),mar=c(3,3,1,0))
-plot(bio1, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
-plot(bio3, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
-plot(bio4, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
-plot(bio7, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
-plot(bio12, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
-plot(bio15, xlim=c(-85,-30),ylim=c(-55,12), col=topo.colors(255))
-dev.off()
+plot(alt, main="Altitude")
+par(mfrow=c(3,2),mar=c(3,3,2,0))
+plot(bio1, col=topo.colors(255), main="Temperatura Média Anual (bio1)")
+plot(bio3, col=topo.colors(255), main="Isotermalidade (bio3)")
+plot(bio4, col=topo.colors(255), main="Sazonalidade da temperatura (bio4)")
+plot(bio7, col=topo.colors(255), main="Variação Anual de Temperatura (bio7)")
+plot(bio12, col=topo.colors(255), main="Precipitação Anual (bio12)")
+plot(bio15, col=topo.colors(255), main="Sazonalidade da precipitação (bio15)")
+dev.off() #retorna os parâmetros gráficos para o default
 ###
 
 #### Explorando os detalhes das camadas climáticas ####
@@ -158,13 +158,14 @@ plot(biostack)
 procniaspolygon=readOGR("./Procnias/procnias_polygon.shp")
 
 #Plotando o polígono da distribuição da Araponga no mapa do Brasil
-plot(procniaspolygon)  
-#refinar com os codigos da Mari
+plot(altBrasil,  main="Altitude Brasil")
+plot(procniaspolygon, add=T)
 
 #Cortando cada camada de uma vez para o poligono da Araponga e 'perfumando' minimamente os mapas
 
 altprocnias=mask(crop(alt,procniaspolygon),procniaspolygon)
 plot(altprocnias, main = "Altitude Procnias",xlab = "Longitude", ylab = "Latitude")
+plot(procniaspolygon, add=T)
 
 bio1procnias=mask(crop(bio1,procniaspolygon),procniaspolygon)
 plot(bio1procnias, main = "bio1 Procnias",xlab = "Longitude", ylab = "Latitude")
@@ -196,6 +197,8 @@ plot(biostack1)
 
 #Correlação entre as camadas usando a função 'pairs'
 pairs(biostack1)
+
+#Visualizar a correlação entre as camadas usando o pacote corrplot
 library(dismo)
 set.seed(1963)
 backgr <- randomPoints(biostack1, 10000)
@@ -220,6 +223,6 @@ biostack2=stack(altprocnias,bio3procnias, bio7procnias,bio12procnias,bio15procni
 biostack2
 
 #Plotando o novo 'stack' com as camadas climáticas não correlacionadas e não-colinares dentro do poligono da  Araponga
-plot(biostack2)
+plot(biostack2, main=c("Altitude", "Isotermalidade (bio3)", "Variação Anual de Temperatura (bio7)", "Precipitação Anual (bio12)","Sazonalidade da precipitação (bio15)"))
 
 ## Fim do script
