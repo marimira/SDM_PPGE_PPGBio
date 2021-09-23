@@ -1,23 +1,32 @@
 # IBE 875 - Modelagem de Distribuição de Espécies
 # PPGE/PPGBio
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
-# Script 3 - Entrada, filtragem e limpeza de registros de ocorrência e geração de pseudo-ausências e background.
+# Script 3 - Registros de ocorrência, pseudo-ausências e background.
 
+
+#### Definindo área de trabalho ####
+setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereço da pasta da disciplina no seu computador
+getwd()
+
+#### Carregando pacotes ####
+library(tidyr)
+library(maptools)
+library(spThin)
 
 #### Carregando os registros de ocorrência ####
 
-#### Obtendo os registros do diretorio ####
-procnias=read.csv("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Procnias/procnias_nudicollis.csv",header=T,  sep = ";")
+#### Obtendo os registros do diretório ####
+procnias=read.csv("./Procnias/procnias_nudicollis.csv",header=T,  sep = ";")
 View(procnias)
 
-#### Checando inconsistências relacionadas aos registros de ocorrências - problemas, filtrando e fazendo limpeza ####
+#### Checando inconsistências relacionadas aos registros de ocorrências - problemas, filtro e limpeza ####
 # Caso existam linhas nas colunas das coordenadas sem informações (NA), a função as remove
 procnias_na <- procnias %>% tidyr::drop_na(decimalLongitude, decimalLatitude)
 View(procnias_na)
 #Quantos registros foram removidos por não conter coordenadas?
 
 # Limpando registros com outros problemas referente as coordenadas 
-# Marcando os registros potencialmente problematicos 
+# Marcando os registros potencialmente problemáticos 
 flags_spatial <- CoordinateCleaner::clean_coordinates(
   x = procnias_na, 
   species = "species",
@@ -47,12 +56,6 @@ procnias_f <- procnias_na %>%
   dplyr::filter(flags_spatial$.summary == TRUE)
 #Quantos registros ficaram retidos após a remoção dos problematicos?
 
-
-#### Plotando os registros de ocorrência filtrados para visualização ####
-  
-#codigos Mari
-
-
 #### Limpando e selecionando as colunas de interesse ####
 procnias_f = procnias_f %>%
   dplyr::select(species, decimalLongitude, decimalLatitude)
@@ -61,8 +64,15 @@ procnias_f = procnias_f %>%
 nrow(procnias_f)
 colnames(procnias_f)
 
+#### Plotando os registros de ocorrência filtrados para visualização ####
+
+plot(alt, xlim=c(-80,-30),ylim=c(-40,10), main="Presence points by altitude")
+data(wrld_simpl)
+plot(wrld_simpl, add=TRUE, border='darkgray', lwd=1)
+points(procnias_f$decimalLongitude, procnias_f$decimalLatitude, col='blue', cex=0.3)
+
 #### Filtrando os registros de ocorrência baseado em uma distância 'x' para evitar potenciais problemas de autocorrelação espacial ####
-procnias_f <- 
+procnias_thin <- 
   thin( loc.data = procnias_f, 
         lat.col = "decimalLatitude", long.col = "decimalLongitude", 
         spec.col = "species", 
@@ -71,43 +81,44 @@ procnias_f <-
         locs.thinned.list.return = TRUE, 
         write.files = TRUE, 
         max.files = 2, 
-        out.dir = "C:/Users/rhtar/OneDrive/R/ENM_PPGE/Procnias", out.base = "procnias_thinned", 
+        out.dir = "./Procnias", out.base = "procnias_thinned", 
         write.log.file = TRUE,
         log.file = "procnias_thinned_log.txt")
 
 #Explorando visualmente o efeito do processo de filtragem espacial dos dados
-plotThin(procnias_f)
+plotThin(procnias_thin)
 
 #Valores chegaram no valor máximo com as repetições usadas. Dê uma olhada no arquivo 'log' com todos os detalhes
 
 #Carregando o novo arquivo com o processo de filtragem espacial realizado.
-procnias_f=read.csv("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Procnias/procnias_thinned_thin1.csv", sep=",")
+procnias_f=read.csv("./Procnias/procnias_thinned_thin1.csv", sep=",")
 View(procnias_f)
 
 #### Plotando os registros de ocorrência filtrados espacialmente para visualização ####
 
-#codigos Mari
+plot(alt, xlim=c(-80,-30),ylim=c(-40,10), main="Presence points by altitude")
+plot(wrld_simpl, add=TRUE, border='darkgray', lwd=1)
+points(procnias_f$decimalLongitude, procnias_f$decimalLatitude, col='blue', cex=0.3)
 
 
 #Inserindo uma coluna contendo todos os registros igual a 1
 resp.occ=as.numeric("resp.occ")
 str(resp.occ)
 procnias_f[,"resp.occ"] = 1
-resp.occ=procnias_f$resp.occ
-is.numeric(resp.occ)
 
 #Checando se houve adição da coluna
 colnames(procnias_f)
 View(procnias_f)
 
-# Agora que todos os registros foram filtrados quanto a inconsistências e para evitar potenciais problemas de autocorrelação espacial, estamos prontos para gerar as pseudo-ausencias
+# Agora os registros foram filtrados quanto a inconsistências e potenciais problemas de autocorrelação espacial, estamos prontos para gerar as pseudo-ausencias
 
 #### Formatando os registros de ocorrência para a modelagem no ambiente BIOMOD ####
 
 #Salvando um objeto apenas com o nome da espécie
-resp.name = 'procnias'
+resp.name <- 'procnias'
 
 # dados de presença da nossa espécie 
+is.numeric(procnias_f$resp.occ)
 myResp <- as.numeric(procnias_f[,"resp.occ"])
 
 #Criando um objeto apenas com as coordenadas da Araponga e concatenando o valor 1 para todas as coordenadas
@@ -172,3 +183,5 @@ plot(bm.procnias100sre)
 
 # Quais foram as diferenças na geração das pseudo ausências com as diferentes estratégias?
 # Explore mais opções, alterando o numero de repetições, numero de pseudo-ausencia, distancia minima e quantil do SRE
+
+#Isso é demais!
