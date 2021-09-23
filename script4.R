@@ -1,9 +1,9 @@
 # IBE 875 - Modelagem de Distribuição de Espécies
 # PPGE/PPGBio
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
-# Script 4 - Algoritmos de envelopes climáticos e generalizados
+# Script 4 - Algoritmos de envelopes climáticos e regressão
 
-# Geração dos modelos usando os algoritmos de envelope (SRE) e generalizados (GLM e GAM)
+# Geração dos modelos usando os algoritmos de envelope (SRE) e regressão  (GLM e GAM)
 
 #### Criando um diretorio 'Outputs' para guardar tabelas com resultados das modelagens ####
 dir.create("Outputs")
@@ -28,9 +28,10 @@ procnias1model = BIOMOD_Modeling(
   SaveObj = TRUE, #se os modelos serão salvos ou não
   rescal.all.models = F,
   do.full.models = FALSE,
-  modeling.id = "NEWprocnias1model")
+  modeling.id = "procnias_envelope_regres")
 
-#Sumário do objeto com os modelos criados, onde é possível ver quais modelos foram gerados (set de pseudoausencia + rodada + algoritmo).
+
+#Sumário do objeto com os modelos criados, onde é possível ver quais modelos foram gerados (conjunto de pseudoausencia + rodada + algoritmo).
 procnias1model
 
 #### Obtendo a importância de cada variável usada nos modelos ####
@@ -40,7 +41,10 @@ var_import_procnias1=get_variables_importance(procnias1model)
 var_import_procnias1
 
 # obtendo os valores médios de importância de cada variável para cada algoritmo
-var_import_procnias1=apply(procnias1model,c(1,2),mean)
+var_import_procnias1=apply(var_import_procnias1, c(1,2), mean)
+
+# obtendo os valores médios de importância de cada variável para cada algoritmo
+var_import_procnias1
 
 # Salvando os valores de importancia das variáveis em um arquivo .csv
 write.csv(var_import_procnias1,paste0("./Outputs/", "_", "var_import_procnias1.csv"))
@@ -49,7 +53,7 @@ write.csv(var_import_procnias1,paste0("./Outputs/", "_", "var_import_procnias1.c
 
 #### Criando curvas de resposta para cada algoritmo ####
 
-#Carregando os modelos individuais que foram gerados acuma
+#Carregando os modelos individuais que foram gerados acima
 procnias1_glm=BIOMOD_LoadModels(procnias1model, models = 'GLM')
 procnias1_gam=BIOMOD_LoadModels(procnias1model, models = 'GAM')
 procnias1_sre=BIOMOD_LoadModels(procnias1model, models = 'SRE')
