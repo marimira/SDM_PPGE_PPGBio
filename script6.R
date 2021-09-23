@@ -3,37 +3,41 @@
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
 # Script 6 - Projeção, transferabilidade e incerteza
 
-#### Projetando as predições dos modelos no espaço geográfico ####
+#### Projetando as predições dos modelos no espaço geográfico - presente ####
 
-#Projetando todos os modelos e rodadas separadamente para GLM, GAM, SRE
+#Gerando o objeto com as predições espaciais de todos os modelos e rodadas separadamente para GLM, GAM, SRE
 projec_procnias1 <- BIOMOD_Projection(
   modeling.output = procnias1model, #objeto com os modelos criados
-  new.env = biostack2, #variaveis ambientais onde os modelos vão ser projetados
+  new.env = biostack1, #variaveis ambientais onde os modelos vão ser projetados
   proj.name = "GLM_GAM_SRE", #nome da pasta com as projeções
   selected.models = "all",
   binary.meth = "TSS", #metodo para binarização
     output.format = ".img", compress = ' xz ' ,
-  clamping.mask = T, do.stack = T
+  clamping.mask = F, do.stack = T
 )
 
 # Sumário do objeto com as projeções no espaço geográfico
 projec_procnias1
 
-#Projetando todos os modelos e rodadas separadamente para GBM, RF, MAXENT
+
+  ##Gerando o objeto com as predições espaciais de todos os modelos e rodadas separadamente para GBM, RF, MaxEnt
 projec_procnias2 <- BIOMOD_Projection(
   modeling.output = procnias2model, #objeto com os modelos criados
-  new.env = biostack2, #variaveis ambientais onde os modelos vão ser projetados
+  new.env = biostack1, #variaveis ambientais onde os modelos vão ser projetados
   proj.name = "GBM_RF_MAX", #nome da pasta com as projeções
   selected.models = "all",
   binary.meth = "TSS", #metodo para binarização
   output.format = ".img", compress = ' xz ' ,
-  clamping.mask = T, do.stack = T
+  clamping.mask = F, do.stack = T
 )
+
+plot(projec_procnias2)
+
 
 # Sumário do objeto com as projeções no espaço geográfico
 projec_procnias2
 
-# Plotando as projeções por algoritmo (melhorar com os códigos da Mari para mapas)
+# Projetando as predições dos modelos individuais por algoritmo (melhorar com os códigos da Mari para mapas)
 plot(projec_procnias1, str.grep = "GLM")
 plot(projec_procnias1, str.grep = "GAM")
 plot(projec_procnias1, str.grep = "SRE")
@@ -49,16 +53,16 @@ plot(projec_procnias2, str.grep = "MAXENT.Phillips")
 #Nomes dos arquivos das camadas na pasta tem que ser os mesmos do presente para 'dar match' e ser possível projetar no futuro
 
 bio3_2060=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Futuro/WC_bio3_lonlat.tif") 
-#Isotermalidade
+#Isotermalidade 2060
 
 bio7_2060=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas//Futuro/WC_bio7_lonlat.tif")
-#Variação Anual da Temperatura
+#Variação Anual da Temperatura 2060
 
 bio12_2060=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Futuro/WC_bio12_lonlat.tif")
-#Precipitação Anual
+#Precipitação Anual 2060
 
 bio15_2060=raster("C:/Users/rhtar/OneDrive/R/ENM_PPGE/Camadas/Futuro/WC_bio15_lonlat.tif")
-#Sazonalidade da precipitação
+#Sazonalidade da precipitação 2060
 
 #### Cortando as camadas futuras para o polígono da Araponga ####
 bio3procnias_futuro=mask(crop(bio3_2060,procniaspolygon),procniaspolygon)
@@ -75,15 +79,16 @@ bio15procnias_futuro=mask(crop(bio15_2060,procniaspolygon),procniaspolygon)
 #### Unindo as variáveis futuras em um unico 'stack' ####
 biostack_futuro=stack(altprocnias,bio3procnias_futuro,bio7procnias_futuro,bio12procnias_futuro,bio15procnias_futuro)
 
-#### Plotando o 'stack' das variáveis futuras (melhorar com os códigos da Mari) ####
-plot(biostack_futuro)
+#### Plotando o 'stack' das variáveis futuras e comparando com o 'stack' do presente (melhorar com os códigos da Mari) ####
+plot(biostack_futuro, col=topo.colors(255))
+plot(biostack1, col=topo.colors(255))
 
 #### Projetando no espaço geográfico os modelos do presente nas condições climáticas futuras ####
 
 projec_procnias1_futuro <- BIOMOD_Projection(
-  modeling.output = procnias1model,
+  modeling.output = procnias1model, #modelo do presente_envelope e regressao
   new.env = biostack_futuro, #aqui você indica as camadas futuras que vão ser usadas para projetar
-  proj.name = "Modelos Futuro",
+  proj.name = "Modelos Futuro_SRE_GLM_GAM", #nome da pasta
   selected.models = "all",
   binary.meth = "TSS",
   output.format = ".img", compress = ' xz ' ,
@@ -92,9 +97,9 @@ projec_procnias1_futuro <- BIOMOD_Projection(
 
 
 projec_procnias2_futuro <- BIOMOD_Projection(
-  modeling.output = procnias2model,
+  modeling.output = procnias2model, #modelo do presente_classificação e maxima entropia
   new.env = biostack_futuro, #aqui você indica as camadas futuras que vão ser usadas para projetar
-  proj.name = "Modelos Futuro",
+  proj.name = "Modelos Futuro_RF_BRT_MAXENT", #nome da pasta
   selected.models = "all",
   binary.meth = "TSS",
   output.format = ".img", compress = ' xz ' ,
@@ -108,5 +113,6 @@ plot(projec_procnias1_futuro, str.grep = "SRE")
 plot(projec_procnias2_futuro, str.grep = "GBM")
 plot(projec_procnias2_futuro, str.grep = "RF")
 plot(projec_procnias2_futuro, str.grep = "MAXENT.Phillips")
+
 
 #### Avaliando transferabilidade (códigos Mari) ####
