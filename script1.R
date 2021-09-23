@@ -111,8 +111,9 @@ lista2[[1]][[2]][3] #Acesse o terceiro elemento do segundo componente da primeir
 f <- function() {
   print("Hello world!")
 }
-## Agora vamos roda nossa função
+## Agora vamos rodar nossa função
 f()
+## Vamos instalar os pacotes que serão usados na disciplina
 install.packages("raster", dependencies=T)
 install.packages("biomod2", dependencies=T)
 install.packages("rgdal", dependencies=T)
@@ -127,6 +128,7 @@ install.packages("spThin", dependencies=T)
 install.packages("dplyr", dependencies=T)
 install.packages("dismo", dependencies=T)
 install.packages("gridExtra", dependencies=T)
+## Agora vamos carregar esses pacotes
 library(raster)
 library(biomod2)
 library(rgdal)
@@ -141,15 +143,16 @@ library(spThin)
 library(dplyr)
 library(dismo)
 library(gridExtra)
-?stack
-help(stack)
+?stack # carregar a ajuda do pacote
+help(stack) # outra forma de carregar a ajuda
 ?biomod2
-??biomod2
-help.start()
+??biomod2 # em vez de carregar direto a ajuda do pacote, aqui vamos pesquisar por "biomod2" e encontrar todos os resultados afins
+help.start() # ajuda geral do R
 setwd("C:/Desktop/my_folder") #Esse caminho está no formato do Windows. Se o seu computador for Mac ou Linux,  o formato do caminho é diferente.
 # Ou…
 my.wd <- "C:/Desktop/my_folder"
 setwd(my.wd)
+getwd() # conferir o caminho que escolhemos
 
 #Plots para visualização
 barplot(x)
