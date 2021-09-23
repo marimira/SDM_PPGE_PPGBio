@@ -8,17 +8,29 @@
 #### Checando as opções 'default' de cada algoritmo ####
 BIOMOD_ModelingOptions()
 
-
+# Modificando as opções do Algoritmo GBM em relaçao a fração aleatória dos dados usados para ajustar cada árvore
+modelo_op2=BIOMOD_ModelingOptions(GBM = list( distribution = 'bernoulli',
+                                              n.trees = 2500,
+                                              interaction.depth = 7,
+                                              n.minobsinnode = 5,
+                                              shrinkage = 0.001,
+                                              bag.fraction = 0.7,
+                                              train.fraction = 1,
+                                              cv.folds = 3,
+                                              keep.data = FALSE,
+                                              verbose = FALSE,
+                                              perf.method = 'cv',
+                                              n.cores = 1))
 #### Formatando os dados, camadas e fazendo conexão para o formato do Maxent ####
 # Para trabalhar com o MAXENT nós temos que criar um caminho para um diretório contendo nossas variaveis explanatórias em ascii
 
 maxent.background.dat.dir <- "maxent_bg"
 dir.create(maxent.background.dat.dir, showWarnings = FALSE, recursive = TRUE)
 
-## salvando as variáveis explanatórias em .ascii
-for(var_ in names(biostack2)){
+## salvando as variáveis preditoras em .ascii
+for(var_ in names(biostack1)){
   cat("\n> saving", paste0(var_, ".asc"))
-  writeRaster(subset(biostack2, var_), 
+  writeRaster(subset(biostack1, var_), 
               filename = file.path(maxent.background.dat.dir, paste0(var_, ".asc")),
               overwrite = TRUE)
 }
@@ -38,7 +50,7 @@ procnias2model = BIOMOD_Modeling(
   SaveObj = TRUE, #se os modelos serão salvos ou não
   rescal.all.models = F,
   do.full.models = FALSE,
-  modeling.id = "NEWprocnias2model")
+  modeling.id = "procnias_classif_maxent")
 
 #Sumário do objeto com os modelos criados, onde é possível ver quais modelos foram gerados (set de pseudoausencia + rodada + algoritmo).
 procnias2model
@@ -50,10 +62,10 @@ var_import_procnias2=get_variables_importance(procnias2model)
 var_import_procnias2
 
 # obtendo os valores médios de importância de cada variável para cada algoritmo
-var_import_procnias2=apply(procnias2model,c(1,2),mean)
+var_import_procnias2=apply(var_import_procnias2,c(1,2),mean)
 
 # Salvando os valores de importancia das variáveis em um arquivo .csv
-write.csv(var_import_procnias2, file="var_import_procnias2.csv")
+write.csv(var_import_procnias2,paste0("./Outputs/", "_", "var_import_procnias2.csv"))
 
 #Qual variável foi a mais importante para cada algoritmo? Houveram diferenças entre algoritmos?
 
