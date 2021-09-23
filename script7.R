@@ -41,7 +41,7 @@ grid.arrange(gg1_procnias2, gg2_procnias2, gg3_procnias2)
 Ensemble1procnias <- BIOMOD_EnsembleModeling(
   modeling.output = procnias1model, # modelos individuais
   chosen.models = "all" ,
-  em.by= "all" , #tipo de união para consenso (PA + Rodada + Algoritmo)
+  em.by= "all" , #tipo de combinação para produzir o modelo de consenso (PA + Rodada + Algoritmo)
   eval.metric = c("TSS"), #metrica de desempenho usada para fazer o consenso
   eval.metric.quality.threshold = c(0.7), #valor de corte para os modelos usados para o consenso
   prob.mean = T, #consenso com a média das predições entre os modelos individuais
@@ -67,25 +67,17 @@ Ensemble2procnias <- BIOMOD_EnsembleModeling(
   prob.median = F, #consenso com a mediana das predições entre os modelos individuais
   committee.averaging = T, #consenso com o comitê de acordo/desacordo das predições entre os modelos individuais
   prob.mean.weight = T, #consenso com a média ponderada das predições entre os modelos individuais
-  prob.mean.weight.decay = "proportional" )
+  prob.mean.weight.decay = "proportional" #maneira de calcular a ponderação das médias)
 
 #### Avaliação de desempenho dos modelos de consenso, incluindo as métricas relacionadas a incerteza ####
 evalprocnias1ensemble = get_evaluations(Ensemble1procnias)
 evalprocnias2ensemble = get_evaluations(Ensemble2procnias)
-
-#### Avaliação de desempenho dos modelos individuais (rodada + set PA + algoritmo), incluindo as métricas relacionadas a incerteza ####
-evalprocnias1 = get_evaluations(procnias1model)
-evalprocnias2 = get_evaluations(procnias2model)
 
 # Sumário das avaliações do desempenho dos modelos individuais (rodada + set PA + algoritmo )
 #Testing.data = valor de desempenho, podendo ser ROC, TSS ou Kappa
 #Cutoff = Valor de corte para binarizar os modelos
 #Sensitivity = % de presenças corretamente preditas
 #Especificidade = % de ausências corretamente preditas
-
-evalprocnias1
-
-evalprocnias2
 
 # Sumário das avaliações do desempenho dos modelos de consenso (rodada + set PA + algoritmo )
 evalprocnias1ensemble
@@ -95,34 +87,26 @@ evalprocnias2ensemble
 # Usando a sensibilidade (proporção de presenças corretamente preditas) e a especificidade (proporção de ausências corretamente preditas) como medidas de incerteza dos modelos pode-se observar diferenças entre os diferentes algoritmos usados para o consenso? Algum foi menos sensivel do que o outro, ou seja teve menor capacidade de prever as presenças corretamente?
 
 #Salvando os valores de desempenho (TSS, ROC, Sensibilidade, Especificidade) em uma tabela .csv
-write.table(evalprocnias1,paste0("./Outputs/", "_", "evalprocnias1.csv"))
-
-write.table(evalprocnias2,paste0("./Outputs/", "_", "evalprocnias2.csv"))
-
 
 write.table(evalprocnias1ensemble,paste0("./Outputs/", "_", "evalprocnias1ensemble.csv"))
 
 write.table(evalprocnias2ensemble,paste0("./Outputs/", "_", "evalprocnias2ensemble.csv"))
 
-#Plotando os valores de desempenho dos modelos gerados - modelos GLM, GAM, SRE
-gg1_procnias1 =  models_scores_graph(procnias1model, metrics = c("TSS, ROC"), by = "models", plot = FALSE)
-gg2_procnias1 =  models_scores_graph(procnias1model, metrics = c("ROC"), by = "data_set", plot = FALSE)
-gg3_procnias1 =  models_scores_graph(procnias1model, metrics = c("ROC"), by = "cv_run", plot = FALSE)
-
-grid.arrange(gg1_procnias1, gg2_procnias1, gg3_procnias1)
-
-#Plotando os valores de desempenho dos modelos gerados - modelos RF, GBM, MaxEnt
-gg1_procnias2 =  models_scores_graph(procnias2model, metrics = c("TSS, ROC"), by = "models", plot = FALSE)
-gg2_procnias2 =  models_scores_graph(procnias2model, metrics = c("ROC"), by = "data_set", plot = FALSE)
-gg3_procnias2 =  models_scores_graph(procnias2model, metrics = c("ROC"), by = "cv_run", plot = FALSE)
-
-grid.arrange(gg1_procnias2, gg2_procnias2, gg3_procnias2)
 
 
 #### Projetando no espaço geográfico as predições dos modelos de consenso ####
-proj1ensemble=BIOMOD_EnsembleForecasting( projection.output = projec_procnias1, EM.output = Ensemble1procnias, binary.meth = "TSS", output.format = ".img")
+proj1ensemble=BIOMOD_EnsembleForecasting( projection.output = projec_procnias1, #objeto com as predições dos modelos individuais
+                                          EM.output = Ensemble1procnias, #objeto com a modelagem consenso
+                                          binary.meth = "TSS", #método de avaliação de desempenho para transformar as predições contínuas de adequabilidade em predições binárias (presença/ausência) 
+                                          output.format = ".img" #formato par salvar os mapas
+                                          )
 
-proj2ensemble=BIOMOD_EnsembleForecasting( projection.output = projec_procnias2, EM.output = Ensemble2procnias, binary.meth = "TSS", output.format = ".img")
+proj2ensemble=BIOMOD_EnsembleForecasting( projection.output = projec_procnias2, #objeto com as predições dos modelos individuais
+                                          EM.output = Ensemble2procnias, #objeto com a modelagem consenso
+                                          binary.meth = "TSS", #método de avaliação de desempenho para transformar as predições contínuas de adequabilidade em predições binárias (presença/ausência) 
+                                          output.format = ".img" #formato par salvar os mapas
+)
+
 
 #### Plotando as projeções dos modelos de consenso (melhorar com os códigos da Mari)####
 
@@ -140,13 +124,30 @@ plot(proj1ensemble, str.grep = "procnias_EMcvByTSS_mergedAlgo_mergedRun_mergedDa
 #Committee averaging
 plot(proj1ensemble, str.grep = "procnias_EMcaByTSS_mergedAlgo_mergedRun_mergedData")
 
-#### Projetando no espaço geográfico os modelos de consenso do presente nas condições climáticas futuras ####
-proj1ensemble_futuro=BIOMOD_EnsembleForecasting( projection.output = projec_procnias1_futuro, EM.output = Ensemble1procnias, binary.meth = "TSS", output.format = ".img")
+#Mapa binarizado
 
-proj2ensemble_futuro=BIOMOD_EnsembleForecasting( projection.output = projec_procnias2_futuro, EM.output = Ensemble2procnias, binary.meth = "TSS", output.format = ".img")
+#Primeiro temos que carregar o arquivo que foi salvo no processo de modelagem e projeção - GLM_GAM_SRE
+procnias1ensemble_bin=raster("./Procnias/proj_GLM_GAM_SRE/proj_GLM_GAM_SRE_procnias_ensemble_TSSbin.img")
+
+#Agora o plot
+plot(procnias1ensemble_bin)
+
+#Carregando o mapa binarizado dos modelos com os algoritmos RF, GBM, MAXENT
+procnias2ensemble_bin=raster("./Procnias/proj_GBM_RF_MAX/proj_GBM_RF_MAX_procnias_ensemble_TSSbin.img")
+
+#Agora o plot
+plot(procnias2ensemble_bin)
+
+#### Projetando no espaço geográfico os modelos de consenso do presente nas condições climáticas futuras ####
+proj1ensemble_futuro=BIOMOD_EnsembleForecasting( projection.output = projec_procnias1_futuro, #output gerado da projeção dos modelos individuais no futuro
+                                                 EM.output = Ensemble1procnias, #output com o consenso de modelos gerados para o persente
+                                                 binary.meth = "TSS", output.format = ".img")
+
+proj2ensemble_futuro=BIOMOD_EnsembleForecasting( projection.output = projec_procnias2_futuro, #output gerado da projeção dos modelos individuais no futuro
+                                                 EM.output = Ensemble2procnias, #output com o consenso de modelos gerados para o persente
+                                                 binary.meth = "TSS", output.format = ".img")
 
 #### Plotando as projeções dos modelos de consenso futuros (melhorar com os códigos da Mari)####
-par(mfrow=c(2,2))
 
 #Média 
 plot(proj1ensemble_futuro, str.grep = "procnias_EMmeanByTSS_mergedAlgo_mergedRun_mergedData")
@@ -154,6 +155,11 @@ plot(proj1ensemble_futuro, str.grep = "procnias_EMmeanByTSS_mergedAlgo_mergedRun
 #Média ponderada
 plot(proj1ensemble_futuro, str.grep = "procnias_EMwmeanByTSS_mergedAlgo_mergedRun_mergedData")
 
+#Média 
+plot(proj2ensemble_futuro, str.grep = "procnias_EMmeanByTSS_mergedAlgo_mergedRun_mergedData")
+
+#Média ponderada
+plot(proj2ensemble_futuro, str.grep = "procnias_EMwmeanByTSS_mergedAlgo_mergedRun_mergedData")
 
 #Mapas com métricas para avaliar as áreas com maiores ou menores incertezas (melhorar com os códigos da Mari)
 
@@ -162,5 +168,19 @@ plot(proj1ensemble_futuro, str.grep = "procnias_EMcvByTSS_mergedAlgo_mergedRun_m
 
 #Committee averaging
 plot(proj1ensemble_futuro, str.grep = "procnias_EMcaByTSS_mergedAlgo_mergedRun_mergedData")
+
+#Mapa binarizado
+#Primeiro temos que carregar o arquivo que foi salvo no processo de modelagem e projeção
+#Modelos GLM_GAM_SRE
+procnias1ensemble_binfuturo=raster("./Procnias/proj_Modelos Futuro_SRE_GLM_GAM/proj_Modelos Futuro_SRE_GLM_GAM_procnias_ensemble_TSSbin.img")
+
+#Agora o plot
+plot(procnias1ensemble_binfuturo)
+
+#Modelos RF_GBM_MAXENT
+procnias2ensemble_binfuturo=raster("./Procnias/proj_Modelos Futuro_RF_BRT_MAXENT/proj_Modelos Futuro_RF_BRT_MAXENT_procnias_ensemble_TSSbin.img")
+
+#Agora o plot
+plot(procnias2ensemble_binfuturo)
 
 # Fim do script 7
