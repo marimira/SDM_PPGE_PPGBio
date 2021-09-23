@@ -149,7 +149,7 @@ help.start()
 setwd("C:/Desktop/my_folder") #Esse caminho está no formato do Windows. Se o seu computador for Mac ou Linux,  o formato do caminho é diferente.
 # Ou…
 my.wd <- "C:/Desktop/my_folder"
-setwd(my.md)
+setwd(my.wd)
 
 #Plots para visualização
 barplot(x)
