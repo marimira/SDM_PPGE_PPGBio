@@ -1,11 +1,13 @@
 # IBE 875 - Modelagem de Distribuição de Espécies
 # PPGE/PPGBio
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
-# Script 2 - Processamento e exploração visual de variáveis preditoras
+# Script 2 - Processamento e exploração visual de preditores ambientais
 
-##Inicio do script
+####################################
+# Script 2 - Preditores ambientais #
+####################################
 
-#### Definindo área de trabalho ####
+#### Definindo diretório de trabalho ####
 setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereço da pasta da disciplina no seu computador
 getwd()
 
@@ -35,6 +37,7 @@ list_layers("WorldClim")
 #Obtendo camadas do Worldclim a partir da pasta da disciplina (se vc fez o download completo da pasta do GoogleDrive o caminho abaixo deve funcionar)
 #Camadas topográficas
 alt=raster("./Camadas/Presente/WC_alt_lonlat.tif")
+alt
 #Altitude
 
 #Camadas climáticas
@@ -80,18 +83,6 @@ bio15=raster("./Camadas/Presente/WC_bio15_lonlat.tif")
 #bio15=load_layers("WC_bio15", datadir = "./Camadas")
 #Sazonalidade da precipitação (CV)
 
-#### Visualizando as camadas climáticas ####
-plot(alt, main="Altitude")
-par(mfrow=c(3,2),mar=c(3,3,2,0))
-plot(bio1, col=topo.colors(255), main="Temperatura Média Anual (bio1)")
-plot(bio3, col=topo.colors(255), main="Isotermalidade (bio3)")
-plot(bio4, col=topo.colors(255), main="Sazonalidade da temperatura (bio4)")
-plot(bio7, col=topo.colors(255), main="Variação Anual de Temperatura (bio7)")
-plot(bio12, col=topo.colors(255), main="Precipitação Anual (bio12)")
-plot(bio15, col=topo.colors(255), main="Sazonalidade da precipitação (bio15)")
-dev.off() #retorna os parâmetros gráficos para o default
-###
-
 #### Explorando os detalhes das camadas climáticas ####
 
 #Obtendo os limites e detalhes das camadas
@@ -103,6 +94,18 @@ bbox(bio7); ncol(bio7); nrow(bio7) ; res(bio7)
 bbox(bio12); ncol(bio12); nrow(bio12) ; res(bio12)
 bbox(bio15); ncol(bio15); nrow(bio15) ; res(bio15)
 compareRaster(alt, bio1, bio3, bio4, bio7, bio12, bio15)
+
+#### Visualizando as camadas climáticas ####
+plot(alt, main="Altitude")
+par(mfrow=c(3,2),mar=c(3,3,2,0)) #ajustar parâmetros gráficos para particionar a área do plot (mfrow) em 3 linhas e 2 colunas e ajustar as margens (mar)
+plot(bio1, col=topo.colors(255), main="Temperatura Média Anual (bio1)")
+plot(bio3, col=topo.colors(255), main="Isotermalidade (bio3)")
+plot(bio4, col=topo.colors(255), main="Sazonalidade da temperatura (bio4)")
+plot(bio7, col=topo.colors(255), main="Variação Anual de Temperatura (bio7)")
+plot(bio12, col=topo.colors(255), main="Precipitação Anual (bio12)")
+plot(bio15, col=topo.colors(255), main="Sazonalidade da precipitação (bio15)")
+dev.off() #retorna os parâmetros gráficos para o default
+###
 
 #### Processando as camadas climáticas ####
 
@@ -193,14 +196,13 @@ summary(biostack1)
 #Plotando o 'stack' com as camadas climáticas dentro do poligono da  Araponga
 plot(biostack1)
 
-#Checando existência de correlação e multicolinearidade entre variáveis
+#Checando existência de correlação e multicolinearidade entre as variáveis
 
 #Correlação entre as camadas usando a função 'pairs'
 pairs(biostack1)
 
 #Visualizar a correlação entre as camadas usando o pacote corrplot
-library(dismo)
-set.seed(1963)
+set.seed(1963) #seed number para sempre gerar os mesmos pontos abaixo
 backgr <- randomPoints(biostack1, 10000)
 absclim <- data.frame(extract(biostack1, backgr))
 absclim.std <- data.frame(scale(absclim)) # Scale variables
@@ -225,4 +227,7 @@ biostack2
 #Plotando o novo 'stack' com as camadas climáticas não correlacionadas e não-colinares dentro do poligono da  Araponga
 plot(biostack2, main=c("Altitude", "Isotermalidade (bio3)", "Variação Anual de Temperatura (bio7)", "Precipitação Anual (bio12)","Sazonalidade da precipitação (bio15)"))
 
-## Fim do script
+#Salvando o espaço de trabalho com todos os objetos num documento RData que pode ser carregado posteriormente.
+save.image(file="script1.RData")
+
+## Fim do script2
