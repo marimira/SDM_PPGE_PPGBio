@@ -8,7 +8,7 @@
 ####################################
 
 #### Definindo diretório de trabalho ####
-setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereço da pasta da disciplina no seu computador
+setwd("D:/Alunos/Joana Paula Oliveira/PPGBIO/Disciplinas/MDE - tutoria/Modelagem de Distribuição de Espécies-20210926T130618Z-001/Modelagem de Distribuição de Espécies") #Mude para o endereço da pasta da disciplina no seu computador
 getwd()
 
 #### Carregando pacotes ####
@@ -26,6 +26,9 @@ library(spThin)
 library(dplyr)
 library(dismo)
 library(gridExtra)
+
+### Caso o corrplot não esteja instalado
+#install.packages("corrplot")
 
 #### Listando e carregando os datasets pre-existentes ####
 
@@ -206,6 +209,7 @@ set.seed(1963) #seed number para sempre gerar os mesmos pontos abaixo
 backgr <- randomPoints(biostack1, 10000)
 absclim <- data.frame(extract(biostack1, backgr))
 absclim.std <- data.frame(scale(absclim)) # Scale variables
+
 library(corrplot)
 M <- cor(absclim.std)
 corrplot.mixed(M, upper = "ellipse", lower = "number",number.cex = 0.8,tl.cex = 0.8)
