@@ -27,9 +27,6 @@ library(dplyr)
 library(dismo)
 library(gridExtra)
 
-### Caso o corrplot não esteja instalado
-#install.packages("corrplot")
-
 #### Listando e carregando os datasets pre-existentes ####
 
 list_datasets()
@@ -208,7 +205,7 @@ pairs(biostack1)
 set.seed(1963) #seed number para sempre gerar os mesmos pontos abaixo
 backgr <- randomPoints(biostack1, 10000)
 absclim <- data.frame(extract(biostack1, backgr))
-absclim.std <- data.frame(scale(absclim)) # Scale variables
+absclim.std <- data.frame(scale(absclim)) # Normalizar as variáveis
 
 library(corrplot)
 M <- cor(absclim.std)
