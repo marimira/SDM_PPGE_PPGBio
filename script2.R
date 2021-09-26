@@ -27,9 +27,6 @@ library(dplyr)
 library(dismo)
 library(gridExtra)
 
-### Caso o corrplot não esteja instalado
-#install.packages("corrplot")
-
 #### Listando e carregando os datasets pre-existentes ####
 
 list_datasets()
