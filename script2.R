@@ -229,6 +229,6 @@ biostack2
 plot(biostack2, main=c("Altitude", "Isotermalidade (bio3)", "Variação Anual de Temperatura (bio7)", "Precipitação Anual (bio12)","Sazonalidade da precipitação (bio15)"))
 
 #Salvando o espaço de trabalho com todos os objetos num documento RData que pode ser carregado posteriormente.
-save.image(file="script1.RData")
+save.image(file="script2.RData")
 
 ## Fim do script2
