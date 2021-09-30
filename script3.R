@@ -92,7 +92,7 @@ procnias_thin <-
         max.files = 2, 
         out.dir = "./Procnias/thinned", out.base = "procnias_thinned", 
         write.log.file = TRUE,
-        log.file = "./Procnias//thinnedprocnias_thinned_log.txt")
+        log.file = "./Procnias/thinned/procnias_thinned_log.txt")
 
 #Explorando visualmente o efeito do processo de filtragem espacial dos dados
 plotThin(procnias_thin) # Clique 'enter' no console varias vezes para visualizar diferentes graficos
