@@ -79,6 +79,8 @@ plot(wrld_simpl, add=TRUE, border='darkgray', lwd=1)
 points(procnias_f$decimalLongitude, procnias_f$decimalLatitude, col='blue', cex=0.3)
 
 #### Filtrando os registros de ocorrencia baseado em uma distancia 'x' para evitar potenciais problemas de autocorrelacao espacial ####
+dir.create("./Procnias/thinned") # criando um diretorio para salvar os dados a serem filtrados
+
 procnias_thin <- 
   thin( loc.data = procnias_f, 
         lat.col = "decimalLatitude", long.col = "decimalLongitude", 
@@ -88,20 +90,20 @@ procnias_thin <-
         locs.thinned.list.return = TRUE, 
         write.files = TRUE, 
         max.files = 2, 
-        out.dir = "./Procnias", out.base = "procnias_thinned", 
+        out.dir = "./Procnias/thinned", out.base = "procnias_thinned", 
         write.log.file = TRUE,
-        log.file = "./Procnias/procnias_thinned_log.txt")
+        log.file = "./Procnias//thinnedprocnias_thinned_log.txt")
 
 #Explorando visualmente o efeito do processo de filtragem espacial dos dados
-plotThin(procnias_thin) # Clique 'enter' no console varias vezes para vizualizar diferentes graficos
+plotThin(procnias_thin) # Clique 'enter' no console varias vezes para visualizar diferentes graficos
 
 #Valores chegaram no valor máximo com as repeticoes usadas. De uma olhada no arquivo 'log' com todos os detalhes
 
 #Carregando o novo arquivo com o processo de filtragem espacial realizado.
-procnias_thin=read.csv("./Procnias/procnias_thinned_thin1.csv", sep=",")
+procnias_thin=read.csv("./Procnias/thinned/procnias_thinned_thin1.csv", sep=",")
 View(procnias_thin)
 
-#### Plotando os registros de ocorrencia filtrados espacialmente para visualizacao ####
+#### Plotando os registros de ocorrencia filtrados em relacao aos antigos ####
 
 plot(alt, xlim=c(-80,-30),ylim=c(-40,10), main="Pontos de ocorrencia por atitude")
 plot(wrld_simpl, add=TRUE, border='darkgray', lwd=1)
@@ -112,6 +114,8 @@ points(procnias_thin$decimalLongitude, procnias_thin$decimalLatitude, col='red',
 resp.occ=as.numeric("resp.occ")
 str(resp.occ)
 procnias_thin[,"resp.occ"] = 1
+resp.occ=procnias_thin$resp.occ
+is.numeric(resp.occ)
 
 #Checando se houve adicao da coluna
 colnames(procnias_thin)

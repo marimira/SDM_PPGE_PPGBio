@@ -16,7 +16,7 @@ library(biomod2)
 library(raster)
 library(rgdal) #Carregar shapefiles
 library(sdmpredictors) #Carregar as camadas online
-#library(maptools)
+library(maptools)
 library(usdm) #Teste de Inflação de Variância (VIF) para 'stacks'
 library(ecospat)
 library(CoordinateCleaner)
