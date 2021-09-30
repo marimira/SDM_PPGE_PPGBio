@@ -75,10 +75,10 @@ procnias1_sre=BIOMOD_LoadModels(procnias1model, models = 'SRE')
 
 #Plotando as curvas de resposta para cada modelo para cada variavel, incluindo todas as rodadas.
 
-glm_responsecurve= biomod2::response.plot2(models = procnias1_glm, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "GLM_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
+biomod2::response.plot2(models = procnias1_glm, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, name= "GLM_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
 
-gam_responsecurve= biomod2::response.plot2(models = procnias1_gam, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "GAM_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
+biomod2::response.plot2(models = procnias1_gam, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, name= "GAM_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
 
-sre_responsecurve= biomod2::response.plot2(models = procnias1_sre, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "SRE_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
+biomod2::response.plot2(models = procnias1_sre, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, name= "SRE_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
 
 # Fim do script 4
