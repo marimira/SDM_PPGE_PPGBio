@@ -101,7 +101,7 @@ plotThin(procnias_thin) # Clique 'enter' no console varias vezes para vizualizar
 procnias_thin=read.csv("./Procnias/procnias_thinned_thin1.csv", sep=",")
 View(procnias_thin)
 
-#### Plotando os registros de ocorrencia filtrados espacialmente para visualizacao ####
+#### Plotando os registros de ocorrencia filtrados em relacao aos antigos ####
 
 plot(alt, xlim=c(-80,-30),ylim=c(-40,10), main="Pontos de ocorrencia por atitude")
 plot(wrld_simpl, add=TRUE, border='darkgray', lwd=1)
@@ -112,6 +112,8 @@ points(procnias_thin$decimalLongitude, procnias_thin$decimalLatitude, col='red',
 resp.occ=as.numeric("resp.occ")
 str(resp.occ)
 procnias_thin[,"resp.occ"] = 1
+resp.occ=procnias_thin$resp.occ
+is.numeric(resp.occ)
 
 #Checando se houve adicao da coluna
 colnames(procnias_thin)
