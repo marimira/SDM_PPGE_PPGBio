@@ -191,6 +191,9 @@ bm.procnias100sre
 #Visualização da configuração espacial das Pseudo Ausências
 plot(bm.procnias100sre)
 
+#Salvando o espaço de trabalho com todos os objetos num documento RData que pode ser carregado posteriormente.
+save.image(file="script3.RData")
+
 # Quais foram as principais diferencas na geracao das pseudo ausencias com as diferentes estrategias?
 # Explore mais opcoes, alterando o numero de repeticoes, numero de pseudo-ausencia, distancia minima e quantil do SRE
 
