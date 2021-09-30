@@ -16,7 +16,7 @@ library(biomod2)
 library(raster)
 library(rgdal) #Carregar shapefiles
 library(sdmpredictors) #Carregar as camadas online
-#library(maptools)
+library(maptools)
 library(usdm) #Teste de Inflação de Variância (VIF) para 'stacks'
 library(ecospat)
 library(CoordinateCleaner)
@@ -204,7 +204,7 @@ pairs(biostack1)
 #Visualizar a correlação entre as camadas usando o pacote corrplot
 set.seed(1963) #seed number para sempre gerar os mesmos pontos abaixo
 backgr <- randomPoints(biostack1, 10000)
-absclim <- data.frame(extract(biostack1, backgr))
+absclim <- data.frame(raster::extract(biostack1, backgr)) # o comando :: forca o uso da funcao especifica daquele pacote, evitando conflito entre pacotes -> raster::extract = utilize a funcao 'extract' do pacote 'raster' 
 absclim.std <- data.frame(scale(absclim)) # Normalizar as variáveis
 
 library(corrplot)
