@@ -3,6 +3,9 @@
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
 # Script 3 - Registros de ocorrencia, pseudo-ausencias e background.
 
+########################################################
+# Script 3 - Ocorrencia, pseudo-ausencias e background #
+########################################################
 
 #### Definindo area de trabalho ####
 setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereco da pasta da disciplina no seu computador
@@ -118,10 +121,10 @@ View(procnias_thin)
 
 #### Formatando os registros de ocorrencia para a modelagem no ambiente BIOMOD ####
 
-#Salvando um objeto apenas com o nome da espécie
+#Salvando um objeto apenas com o nome da especie
 resp.name <- 'procnias'
 
-# dados de presença da nossa espécie 
+# dados de presença da nossa especie 
 is.numeric(procnias_thin$resp.occ)
 myResp <- as.numeric(procnias_thin[,"resp.occ"])
 
@@ -168,7 +171,7 @@ bm.procnias100disk = BIOMOD_FormatingData(resp.var = resp.occ,
 #sumario do novo objeto criado
 bm.procnias100disk
                                           
-#Visualização da configuração espacial das Pseudo Ausências
+#Visualização da configuração espacial das pseudo-ausencias
 plot(bm.procnias100disk) 
                                           
 #Agora vamos pre-estabelecer que a nossa area onde serao geradas as pseudo-ausencias sera fora do envelope climatico gerado com o algoritmo SRE (Species Range Envelope) 
