@@ -62,9 +62,9 @@ var_import_procnias1=apply(var_import_procnias1, c(1,2), mean)
 var_import_procnias1
 
 # Salvando os valores de importancia das variaveis em um arquivo .csv
-write.csv(var_import_procnias1,paste0("./Outputs/", "_", "var_import_procnias1.csv"))
+write.csv(var_import_procnias1,paste0("./Outputs/", "var_import_procnias1.csv"))
 
-#Qual variavel foi a mais importante para cada algoritmo? Houveram diferenças entre algoritmos?
+#Qual variavel foi a mais importante para cada algoritmo? Houve diferenças entre algoritmos?
 
 #### Criando curvas de resposta para cada algoritmo ####
 
@@ -80,5 +80,8 @@ biomod2::response.plot2(models = procnias1_glm, Data = get_formal_data(procnias1
 biomod2::response.plot2(models = procnias1_gam, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, name= "GAM_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
 
 biomod2::response.plot2(models = procnias1_sre, Data = get_formal_data(procnias1model, 'expl.var'),show.variables = get_formal_data(procnias1model, 'expl.var.names'), do.bivariate = F, name= "SRE_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias1model, 'resp.var') )
+
+#Salvando o espaço de trabalho com todos os objetos num documento RData que pode ser carregado posteriormente.
+save.image(file="script4.RData")
 
 # Fim do script 4
