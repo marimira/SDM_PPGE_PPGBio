@@ -254,7 +254,7 @@ getwd() # conferir o caminho que escolhemos
 ###*****************************
 
 #Se você conseguiu mudar o caminho acima para a pasta da disciplina, tente ler os pontos da espécie Procnias nudicolis abaixo
-read.csv(".Procnias/procnias_nudicollis.csv") #O arquivo 'procnias_nudicollis.csv'está dentro da pasta 'Procnias'
+read.csv(".Procnias/procnias_nudicollis.csv", header=T,  sep = ";") #O arquivo 'procnias_nudicollis.csv'está dentro da pasta 'Procnias'
 
 ### Plots para visualização
 ###*************************
