@@ -46,8 +46,8 @@ flags_spatial <- CoordinateCleaner::clean_coordinates(
             "equal", # coordenadas iguais
             "gbif", # raio ao redor da sede da GBIF
             "institutions", # raio ao redor de instituicoes de pesquisa em biodiversidade
-            "seas", # pontos no mar
-            "urban", # pontos dentro de areas urbanas
+            "ocean", # pontos no mar
+            "urban_areas", # pontos dentro de areas urbanas
             "validity", # ponto de fora do sistema de coordenadas
             "zeros" # zeros e pontos onde lat = lon 
   )
@@ -171,24 +171,24 @@ bm.procnias100disk = BIOMOD_FormatingData(resp.var = resp.occ,
                                           PA.nb.absences = 100, 
                                           PA.strategy = "disk", 
                                           PA.dist.min = 100000) #distancia em metros
-                                          
+
 #sumario do novo objeto criado
 bm.procnias100disk
-                                          
+
 #Visualização da configuração espacial das pseudo-ausencias
 plot(bm.procnias100disk) 
-                                          
+
 #Agora vamos pre-estabelecer que a nossa area onde serao geradas as pseudo-ausencias sera fora do envelope climatico gerado com o algoritmo SRE (Species Range Envelope) 
 
 bm.procnias100sre = BIOMOD_FormatingData(resp.var = resp.occ,
-                                          expl.var = biostack2,
-                                          resp.xy = myRespXY,
-                                          resp.name = resp.name,
-                                          PA.nb.rep = 4,
-                                          PA.nb.absences = 100, 
-                                          PA.strategy = "sre", 
-                                          PA.sre.quant = 0.025, 
-                                          na.rm = T)
+                                         expl.var = biostack2,
+                                         resp.xy = myRespXY,
+                                         resp.name = resp.name,
+                                         PA.nb.rep = 4,
+                                         PA.nb.absences = 100, 
+                                         PA.strategy = "sre", 
+                                         PA.sre.quant = 0.025, 
+                                         na.rm = T)
 
 #sumario do novo objeto criado
 bm.procnias100sre                                          
