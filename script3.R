@@ -46,8 +46,8 @@ flags_spatial <- CoordinateCleaner::clean_coordinates(
             "equal", # coordenadas iguais
             "gbif", # raio ao redor da sede da GBIF
             "institutions", # raio ao redor de instituicoes de pesquisa em biodiversidade
-            "ocean", # pontos no mar
-            "urban_areas", # pontos dentro de areas urbanas
+            "seas", # pontos no mar
+            "urban", # pontos dentro de areas urbanas
             "validity", # ponto de fora do sistema de coordenadas
             "zeros" # zeros e pontos onde lat = lon 
   )
