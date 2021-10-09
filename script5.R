@@ -3,7 +3,23 @@
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
 # Script 5 - Algoritmos de classificação e aprendizado de máquina
 
+###############################################################
+# Script 5 - Algoritmos classificacao, aprendizado de maquina #
+###############################################################
+
 # Geração dos modelos usando os algoritmos de classificação (GBM, RF) e aprendizado de máquina (MaxEnt)
+
+#### Definindo area de trabalho ####
+setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereco da pasta da disciplina no seu computador
+getwd()
+
+#### Carregando pacotes ####
+library(biomod2)
+
+#### Carregando os objetos do script 2, 3 e 4 ####
+load("script2.RData")
+load("script3.RData")
+load("script4.RData")
 
 #### Checando as opções 'default' de cada algoritmo ####
 BIOMOD_ModelingOptions()
