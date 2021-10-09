@@ -8,7 +8,7 @@
 ########################################################
 
 #### Definindo area de trabalho ####
-setwd("D:/Alunos/Joana Paula Oliveira/MDE/Projeto RStudio-GitHub/SDM_PPGE_PPGBio") #Mude para o endereco da pasta da disciplina no seu computador
+setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereco da pasta da disciplina no seu computador
 getwd()
 
 #### Carregando pacotes ####
@@ -37,16 +37,11 @@ View(procnias_na)
 # Limpando registros com outros problemas referente as coordenadas 
 # Marcando os registros potencialmente problematicos
 
-urb <- readOGR("./ne_50m_urban_areas/ne_50m_urban_areas.shp")
-ocean <- readOGR("./ne_50m_ocean/ne_50m_ocean.shp")
-
 flags_spatial <- CoordinateCleaner::clean_coordinates(
   x = procnias_na, 
   species = "species",
   lon = "decimalLongitude", 
   lat = "decimalLatitude",
-  urban_ref = urb,
-  seas_ref = ocean,
   tests = c("capitals", # raio ao redor de capitais
             "centroids", # raio ao redor de centroides de paises e provincias
             "duplicates", # duplicatas
