@@ -15,6 +15,7 @@ getwd()
 
 #### Carregando pacotes ####
 library(biomod2)
+library(raster)
 
 #### Carregando os objetos do script 2, 3 e 4 ####
 load("script2.RData")
@@ -36,19 +37,27 @@ modelo_op2=BIOMOD_ModelingOptions(GBM = list( distribution = 'bernoulli',
                                               keep.data = FALSE,
                                               verbose = FALSE,
                                               perf.method = 'cv',
-                                              n.cores = 1), , MAXENT.Phillips = list( path_to_maxent.jar = 'C:/Users/rhtar/OneDrive/R/ENM_PPGE', memory_allocated = 512,                                                   background_data_dir = 'default',                                        maximumbackground = 'default',                                        maximumiterations = 200,                                          visible = FALSE,                                                  linear = TRUE,                                                                quadratic = TRUE,
-              product = TRUE,
-              threshold = TRUE,
-              hinge = FALSE,
-              lq2lqptthreshold = 80,
-              l2lqthreshold = 10,
-              hingethreshold = 15,
-              beta_threshold = -1,
-              beta_categorical = -1,
-              beta_lqp = -1,
-              beta_hinge = -1,
-              betamultiplier = 1,
-              defaultprevalence = 0.5))
+                                              n.cores = 1),
+                                  MAXENT.Phillips = list( path_to_maxent.jar = 'C:/Users/rhtar/OneDrive/R/ENM_PPGE',
+                                              memory_allocated = 512,
+                                              background_data_dir = 'default',
+                                              maximumbackground = 'default',
+                                              maximumiterations = 200,
+                                              visible = FALSE,
+                                              linear = TRUE,
+                                              quadratic = TRUE,
+                                              product = TRUE,
+                                              threshold = TRUE,
+                                              hinge = FALSE,
+                                              lq2lqptthreshold = 80,
+                                              l2lqthreshold = 10,
+                                              hingethreshold = 15,
+                                              beta_threshold = -1,
+                                              beta_categorical = -1,
+                                              beta_lqp = -1,
+                                              beta_hinge = -1,
+                                              betamultiplier = 1,
+                                              defaultprevalence = 0.5))
 
 #### Formatando os dados, camadas e fazendo conexão para o formato do Maxent ####
 # Para trabalhar com o MAXENT nós temos que criar um caminho para um diretório contendo nossas variaveis explanatórias em ascii
@@ -57,12 +66,14 @@ maxent.background.dat.dir <- "maxent_bg"
 dir.create(maxent.background.dat.dir, showWarnings = FALSE, recursive = TRUE)
 
 ## salvando as variáveis preditoras em .ascii
-for(var_ in names(biostack1)){
+for(var_ in names(biostack2)){
   cat("\n> saving", paste0(var_, ".asc"))
-  writeRaster(subset(biostack1, var_), 
-              filename = file.path(maxent.background.dat.dir, paste0(var_, ".asc")),
-              overwrite = TRUE)
+  writeRaster(subset(biostack2, var_), 
+                      filename = file.path(maxent.background.dat.dir,
+                      paste0(var_, ".asc")),
+                      overwrite = TRUE)
 }
+
 ## definindo o camimnho para o arquivo maxent.jar
 path.to.maxent.jar <- file.path(getwd(), "maxent.jar")
 
@@ -94,7 +105,7 @@ var_import_procnias2
 var_import_procnias2=apply(var_import_procnias2,c(1,2),mean)
 
 # Salvando os valores de importancia das variáveis em um arquivo .csv
-write.csv(var_import_procnias2,paste0("./Outputs/", "_", "var_import_procnias2.csv"))
+write.csv(var_import_procnias2,paste0("./Outputs/", "var_import_procnias2.csv"))
 
 #Qual variável foi a mais importante para cada algoritmo? Houveram diferenças entre algoritmos?
 
@@ -107,10 +118,13 @@ procnias2_MaxEnt=BIOMOD_LoadModels(procnias2model, models = 'MAXENT.Phillips')
 
 #Plotando as curvas de resposta para cada modelo para cada variável, incluindo todas as rodadas.
 
-biomod2::response.plot2(models = procnias2_gbm, Data = get_formal_data(procnias2model, 'expl.var'),show.variables = get_formal_data(procnias2model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "gbm_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias2model, 'resp.var') , plot = T)
+biomod2::response.plot2(models = procnias2_gbm, Data = get_formal_data(procnias2model, 'expl.var'),show.variables = get_formal_data(procnias2model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "Outputs/GBM_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias2model, 'resp.var') , plot = T)
 
-biomod2::response.plot2(models = procnias2_rf, Data = get_formal_data(procnias2model, 'expl.var'),show.variables = get_formal_data(procnias2model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "rf_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias2model, 'resp.var') )
+biomod2::response.plot2(models = procnias2_rf, Data = get_formal_data(procnias2model, 'expl.var'),show.variables = get_formal_data(procnias2model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "Outputs/RF_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias2model, 'resp.var') )
 
-biomod2::response.plot2(models = procnias2_MaxEnt, Data = get_formal_data(procnias2model, 'expl.var'),show.variables = get_formal_data(procnias2model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "MaxEnt_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias2model, 'resp.var'))
+biomod2::response.plot2(models = procnias2_MaxEnt, Data = get_formal_data(procnias2model, 'expl.var'),show.variables = get_formal_data(procnias2model, 'expl.var.names'), do.bivariate = F, save.file = 'jpeg', ImageSize = 720, name= "Outputs/MaxEnt_curva_resposta", fixed.var.metric = 'median', legend = F, display_title = T, data_species = get_formal_data(procnias2model, 'resp.var'))
+
+#Salvando o espaço de trabalho com todos os objetos num documento RData que pode ser carregado posteriormente.
+save.image(file="script5.RData")
 
 # Fim do Script 5
