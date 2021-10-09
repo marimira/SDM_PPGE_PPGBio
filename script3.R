@@ -8,7 +8,7 @@
 ########################################################
 
 #### Definindo area de trabalho ####
-setwd("C:/Users/rhtar/OneDrive/R/SDM_PPGE_PPGBio/") #Mude para o endereco da pasta da disciplina no seu computador
+setwd("D:/Alunos/Joana Paula Oliveira/MDE/Projeto RStudio-GitHub/SDM_PPGE_PPGBio") #Mude para o endereco da pasta da disciplina no seu computador
 getwd()
 
 #### Carregando pacotes ####
