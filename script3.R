@@ -17,7 +17,6 @@ library(maptools)
 library(spThin)
 library(raster)
 library(biomod2)
-library(rgdal)
 
 #### Carregando os objetos do script 2 ####
 load("script2.RData")
@@ -35,18 +34,12 @@ View(procnias_na)
 #Quantos registros foram removidos por nao conter coordenadas?
 
 # Limpando registros com outros problemas referente as coordenadas 
-# Marcando os registros potencialmente problematicos
-
-urb <- readOGR("./ne_50m_urban_areas/ne_50m_urban_areas.shp")
-ocean <- readOGR("./ne_50m_ocean/ne_50m_ocean.shp")
-
+# Marcando os registros potencialmente problematicos 
 flags_spatial <- CoordinateCleaner::clean_coordinates(
   x = procnias_na, 
   species = "species",
   lon = "decimalLongitude", 
   lat = "decimalLatitude",
-  urban_ref = urb,
-  seas_ref = ocean,
   tests = c("capitals", # raio ao redor de capitais
             "centroids", # raio ao redor de centroides de paises e provincias
             "duplicates", # duplicatas
