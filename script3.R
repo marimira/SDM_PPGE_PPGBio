@@ -17,7 +17,6 @@ library(maptools)
 library(spThin)
 library(raster)
 library(biomod2)
-library(rgdal)
 
 #### Carregando os objetos do script 2 ####
 load("script2.RData")
@@ -35,8 +34,7 @@ View(procnias_na)
 #Quantos registros foram removidos por nao conter coordenadas?
 
 # Limpando registros com outros problemas referente as coordenadas 
-# Marcando os registros potencialmente problematicos
-
+# Marcando os registros potencialmente problematicos 
 flags_spatial <- CoordinateCleaner::clean_coordinates(
   x = procnias_na, 
   species = "species",
