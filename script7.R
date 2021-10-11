@@ -191,7 +191,7 @@ plot(proj1ensemble_futuro, str.grep = "procnias_EMcaByTSS_mergedAlgo_mergedRun_m
 #Mapa binarizado
 #Primeiro temos que carregar o arquivo que foi salvo no processo de modelagem e projeção
 #Modelos GLM_GAM_SRE
-procnias1ensemble_binfuturo=raster("./Procnias/proj_Modelos Futuro_SRE_GLM_GAM/proj_Modelos Futuro_SRE_GLM_GAM_procnias_ensemble_TSSbin.img")
+procnias1ensemble_binfuturo=raster("./Procnias/proj_Modelos Futuro_GLM_GAM_SRE/proj_Modelos Futuro_GLM_GAM_SRE_procnias_ensemble_TSSbin.img")
 
 #Agora o plot
 plot(procnias1ensemble_binfuturo)

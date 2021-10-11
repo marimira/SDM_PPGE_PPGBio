@@ -106,7 +106,7 @@ plot(biostack2, col=topo.colors(255))
 projec_procnias1_futuro <- BIOMOD_Projection(
   modeling.output = procnias1model, #modelo do presente_envelope e regressao
   new.env = biostack_futuro, #aqui você indica as camadas futuras que vão ser usadas para projetar
-  proj.name = "Modelos Futuro_SRE_GLM_GAM", #nome da pasta
+  proj.name = "Modelos Futuro_GLM_GAM_SRE", #nome da pasta
   selected.models = "all",
   binary.meth = "TSS",
   output.format = ".img", compress = ' xz ' ,
