@@ -3,6 +3,28 @@
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
 # Script 7 - Avaliação dos modelos, consenso e incerteza
 
+######################################################
+# Script 7 - Avaliação dos modelos, consenso e incerteza #
+######################################################
+
+# Geração dos modelos usando os algoritmos de classificação (GBM, RF) e aprendizado de máquina (MaxEnt)
+
+#### Definindo area de trabalho ####
+setwd("D:\OneDrive\Documentos\R\Scripts\21_MDE_PPGE") #Mude para o endereco da pasta da disciplina no seu computador
+getwd()
+
+#### Carregando pacotes ####
+library(biomod2)
+library(gridExtra)
+library(raster)
+
+#### Carregando os objetos do script 2, 3 e 4 ####
+load("script2.RData")
+load("script3.RData")
+load("script4.RData")
+load("script5.RData")
+load("Script6.RData")
+
 #### Avaliando o desempenho dos modelos ####
 
 # Calculando o ROC e TSS de cada modelo
@@ -11,13 +33,11 @@ evalprocnias2 = get_evaluations(procnias2model)
 
 # Sumário das avaliações do desempenho de cada modelo (rodada + set PA + algoritmo )
 evalprocnias1
-
 evalprocnias2
 
 #Salvando os valores de desempenho (TSS, ROC, Sensibilidade, Especificidade) em uma tabela .csv
-write.table(evalprocnias1,paste0("./Outputs/", "_", "evalprocnias1.csv"))
-
-write.table(evalprocnias1,paste0("./Outputs/", "_", "evalprocnias2.csv"))
+write.table(evalprocnias1,paste0("./Outputs/", "evalprocnias1.csv"))
+write.table(evalprocnias2,paste0("./Outputs/", "evalprocnias2.csv"))
 
 #Plotando os valores de desempenho dos modelos gerados
 #Modelos GLM, GAM, SRE
@@ -51,7 +71,7 @@ Ensemble1procnias <- BIOMOD_EnsembleModeling(
   prob.median = F, #consenso com a mediana das predições entre os modelos individuais
   committee.averaging = T, #consenso com o comitê de acordo/desacordo das predições entre os modelos individuais
   prob.mean.weight = T, #consenso com a média ponderada das predições entre os modelos individuais
-  prob.mean.weight.decay = "proportional" )
+  prob.mean.weight.decay = "proportional" ) #maneira de calcular a ponderação das médias
 
 #Modelo de consenso para os modelos GBM, RF, MAXENT que tiveram um desempenho maior do que TSS > 0.7
 Ensemble2procnias <- BIOMOD_EnsembleModeling(
@@ -67,7 +87,7 @@ Ensemble2procnias <- BIOMOD_EnsembleModeling(
   prob.median = F, #consenso com a mediana das predições entre os modelos individuais
   committee.averaging = T, #consenso com o comitê de acordo/desacordo das predições entre os modelos individuais
   prob.mean.weight = T, #consenso com a média ponderada das predições entre os modelos individuais
-  prob.mean.weight.decay = "proportional" #maneira de calcular a ponderação das médias)
+  prob.mean.weight.decay = "proportional") #maneira de calcular a ponderação das médias
 
 #### Avaliação de desempenho dos modelos de consenso, incluindo as métricas relacionadas a incerteza ####
 evalprocnias1ensemble = get_evaluations(Ensemble1procnias)
@@ -81,16 +101,15 @@ evalprocnias2ensemble = get_evaluations(Ensemble2procnias)
 
 # Sumário das avaliações do desempenho dos modelos de consenso (rodada + set PA + algoritmo )
 evalprocnias1ensemble
-
 evalprocnias2ensemble
 
 # Usando a sensibilidade (proporção de presenças corretamente preditas) e a especificidade (proporção de ausências corretamente preditas) como medidas de incerteza dos modelos pode-se observar diferenças entre os diferentes algoritmos usados para o consenso? Algum foi menos sensivel do que o outro, ou seja teve menor capacidade de prever as presenças corretamente?
 
 #Salvando os valores de desempenho (TSS, ROC, Sensibilidade, Especificidade) em uma tabela .csv
 
-write.table(evalprocnias1ensemble,paste0("./Outputs/", "_", "evalprocnias1ensemble.csv"))
+write.table(evalprocnias1ensemble,paste0("./Outputs/", "evalprocnias1ensemble.csv"))
 
-write.table(evalprocnias2ensemble,paste0("./Outputs/", "_", "evalprocnias2ensemble.csv"))
+write.table(evalprocnias2ensemble,paste0("./Outputs/", "evalprocnias2ensemble.csv"))
 
 
 
@@ -182,5 +201,8 @@ procnias2ensemble_binfuturo=raster("./Procnias/proj_Modelos Futuro_RF_BRT_MAXENT
 
 #Agora o plot
 plot(procnias2ensemble_binfuturo)
+
+#Salvando o espaço de trabalho com todos os objetos num documento RData que pode ser carregado posteriormente.
+save.image(file="script7.RData")
 
 # Fim do script 7
