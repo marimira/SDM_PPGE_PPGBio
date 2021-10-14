@@ -17,7 +17,7 @@ getwd()
 library(biomod2)
 library(raster)
 
-#### Carregando os objetos do script 2, 3 e 4 ####
+#### Carregando os objetos do script 2, 3, 4 e 5 ####
 load("script2.RData")
 load("script3.RData")
 load("script4.RData")
