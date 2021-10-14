@@ -97,9 +97,9 @@ bio3procnias_futuro=bio3procnias_futuro/100
 #### Unindo as variáveis futuras em um unico 'stack' ####
 biostack_futuro=stack(altprocnias,bio3procnias_futuro,bio7procnias_futuro,bio12procnias_futuro,bio15procnias_futuro)
 
-#### Plotando o 'stack' das variáveis futuras e comparando com o 'stack' do presente (melhorar com os códigos da Mari) ####
-plot(biostack_futuro, col=topo.colors(255))
-plot(biostack2, col=topo.colors(255))
+#### Plotando o 'stack' das variáveis futuras e comparando com o 'stack' do presente ####
+plot(biostack_futuro, col=topo.colors(255), main=c("FUTURO: Altitude","Isotermalidade (bio3)","Temperatura anual (bio7)","Precipitação Anual (bio12)","Sazonalidade precipitação (bio15)"))
+plot(biostack2, col=topo.colors(255), main=c("PRESENTE: Altitude","Isotermalidade (bio3)","Temperatura anual (bio7)","Precipitação Anual (bio12)","Sazonalidade precipitação (bio15)"))
 
 #### Projetando no espaço geográfico os modelos do presente nas condições climáticas futuras ####
 
