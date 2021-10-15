@@ -3,9 +3,9 @@
 # Professores: Rodrigo Tardin, Maria Lucia Lorini, Mariana Vasconcellos
 # Script 7 - Avaliação dos modelos, consenso e incerteza
 
-######################################################
+##########################################################
 # Script 7 - Avaliação dos modelos, consenso e incerteza #
-######################################################
+##########################################################
 
 # Geração dos modelos usando os algoritmos de classificação (GBM, RF) e aprendizado de máquina (MaxEnt)
 
@@ -18,7 +18,7 @@ library(biomod2)
 library(gridExtra)
 library(raster)
 
-#### Carregando os objetos do script 2, 3 e 4 ####
+#### Carregando os objetos do script 2, 3, 4, 5 e 6 ####
 load("script2.RData")
 load("script3.RData")
 load("script4.RData")
@@ -166,7 +166,7 @@ proj2ensemble_futuro=BIOMOD_EnsembleForecasting( projection.output = projec_proc
                                                  EM.output = Ensemble2procnias, #output com o consenso de modelos gerados para o persente
                                                  binary.meth = "TSS", output.format = ".img")
 
-#### Plotando as projeções dos modelos de consenso futuros (melhorar com os códigos da Mari)####
+#### Plotando as projeções dos modelos de consenso futuros ####
 
 #Média 
 plot(proj1ensemble_futuro, str.grep = "procnias_EMmeanByTSS_mergedAlgo_mergedRun_mergedData")
@@ -180,7 +180,7 @@ plot(proj2ensemble_futuro, str.grep = "procnias_EMmeanByTSS_mergedAlgo_mergedRun
 #Média ponderada
 plot(proj2ensemble_futuro, str.grep = "procnias_EMwmeanByTSS_mergedAlgo_mergedRun_mergedData")
 
-#Mapas com métricas para avaliar as áreas com maiores ou menores incertezas (melhorar com os códigos da Mari)
+#Mapas com métricas para avaliar as áreas com maiores ou menores incertezas
 
 #Coeficiente de variação
 plot(proj1ensemble_futuro, str.grep = "procnias_EMcvByTSS_mergedAlgo_mergedRun_mergedData")
@@ -194,13 +194,15 @@ plot(proj1ensemble_futuro, str.grep = "procnias_EMcaByTSS_mergedAlgo_mergedRun_m
 procnias1ensemble_binfuturo=raster("./Procnias/proj_Modelos Futuro_GLM_GAM_SRE/proj_Modelos Futuro_GLM_GAM_SRE_procnias_ensemble_TSSbin.img")
 
 #Agora o plot
-plot(procnias1ensemble_binfuturo)
+plot(procnias1ensemble_binfuturo, legend=F, main="Projeção futuro GLM, GAM, SRE")
+legend("bottomright", c('presente','ausente'), pch=15, col=c('#00A600', 'lightgray'), pt.cex=1.3)
 
 #Modelos RF_GBM_MAXENT
 procnias2ensemble_binfuturo=raster("./Procnias/proj_Modelos Futuro_RF_BRT_MAXENT/proj_Modelos Futuro_RF_BRT_MAXENT_procnias_ensemble_TSSbin.img")
 
 #Agora o plot
-plot(procnias2ensemble_binfuturo)
+plot(procnias2ensemble_binfuturo, legend=F, main="Projeção futuro RF, BRT, MAX")
+legend("bottomright", c('presente','ausente'), pch=15, col=c('#00A600', 'lightgray'), pt.cex=1.3)
 
 #Salvando o espaço de trabalho com todos os objetos num documento RData que pode ser carregado posteriormente.
 save.image(file="script7.RData")
