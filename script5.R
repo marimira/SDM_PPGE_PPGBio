@@ -25,6 +25,24 @@ load("script4.RData")
 #### Checando as opções 'default' de cada algoritmo ####
 BIOMOD_ModelingOptions()
 
+## definindo o caminho para o arquivo maxent.jar
+path.to.maxent.jar <- file.path(getwd(), "maxent.jar")
+
+#### Formatando os dados, camadas e fazendo conexão para o formato do Maxent ####
+# Para trabalhar com o MAXENT nós temos que criar um caminho para um diretório contendo nossas variaveis explanatórias em ascii
+
+maxent.background.dat.dir <- "maxent_bg"
+dir.create(maxent.background.dat.dir, showWarnings = FALSE, recursive = TRUE)
+
+## salvando as variáveis preditoras em .ascii
+for(var_ in names(biostack2)){
+  cat("\n> saving", paste0(var_, ".asc"))
+  writeRaster(subset(biostack2, var_), 
+              filename = file.path(maxent.background.dat.dir,
+                                   paste0(var_, ".asc")),
+              overwrite = TRUE)
+}
+
 # Modificando as opções do Algoritmo GBM em relaçao a fração aleatória dos dados usados para ajustar cada árvore
 modelo_op2=BIOMOD_ModelingOptions(GBM = list( distribution = 'bernoulli',
                                               n.trees = 2500,
@@ -38,9 +56,9 @@ modelo_op2=BIOMOD_ModelingOptions(GBM = list( distribution = 'bernoulli',
                                               verbose = FALSE,
                                               perf.method = 'cv',
                                               n.cores = 1),
-                                  MAXENT.Phillips = list( path_to_maxent.jar = 'C:/Users/rhtar/OneDrive/R/ENM_PPGE',
+                                  MAXENT.Phillips = list( path_to_maxent.jar = path.to.maxent.jar,
                                               memory_allocated = 512,
-                                              background_data_dir = 'default',
+                                              background_data_dir = './maxent_bg',
                                               maximumbackground = 'default',
                                               maximumiterations = 200,
                                               visible = FALSE,
@@ -58,24 +76,6 @@ modelo_op2=BIOMOD_ModelingOptions(GBM = list( distribution = 'bernoulli',
                                               beta_hinge = -1,
                                               betamultiplier = 1,
                                               defaultprevalence = 0.5))
-
-#### Formatando os dados, camadas e fazendo conexão para o formato do Maxent ####
-# Para trabalhar com o MAXENT nós temos que criar um caminho para um diretório contendo nossas variaveis explanatórias em ascii
-
-maxent.background.dat.dir <- "maxent_bg"
-dir.create(maxent.background.dat.dir, showWarnings = FALSE, recursive = TRUE)
-
-## salvando as variáveis preditoras em .ascii
-for(var_ in names(biostack2)){
-  cat("\n> saving", paste0(var_, ".asc"))
-  writeRaster(subset(biostack2, var_), 
-                      filename = file.path(maxent.background.dat.dir,
-                      paste0(var_, ".asc")),
-                      overwrite = TRUE)
-}
-
-## definindo o camimnho para o arquivo maxent.jar
-path.to.maxent.jar <- file.path(getwd(), "maxent.jar")
 
 #### Definindo os parâmetros dos modelos, incluindo a escolha dos algoritmos, o numero de rodadas e a divisão do conjunto de dados entre treino e teste. ####
 procnias2model = BIOMOD_Modeling(
